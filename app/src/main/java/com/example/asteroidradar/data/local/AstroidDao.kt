@@ -29,6 +29,16 @@ interface AsteroidDao {
     @Query("Delete from Asteroid")
     fun deleteAll()
 
+
+
     @Query("select * from PictureOfDay")
     fun getPictureOfDay(): LiveData<PictureOfDay>
+
+    @Query("select * from PictureOfDay")
+    fun getPicture(): PictureOfDay?
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPictureOfDay(pictureOfDay: PictureOfDay)
+
 }

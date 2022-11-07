@@ -17,9 +17,9 @@ import com.squareup.picasso.Picasso
 class MainFragment : Fragment() , OnItemClicked{
 
     private var _binding: FragmentMainBinding? = null
-
     private val mainViewModel: MainViewModel by viewModels() {
         MainViewModelFactory(requireContext())
+
     }
     private lateinit var adapter: MainAdapter
 
@@ -27,6 +27,14 @@ class MainFragment : Fragment() , OnItemClicked{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = MainAdapter(this)
+        //mainViewModel.get()
+//        if(mainViewModel.getSavedAsteroid() == null ){
+//            mainViewModel.get()
+//        }
+//        else{
+//            mainViewModel.getSavedAsteroid()
+//        }
+//
 
     }
 
@@ -72,22 +80,84 @@ class MainFragment : Fragment() , OnItemClicked{
     }
 
     private fun getPictureOfTheDay() {
-        mainViewModel.pictureResult.observe(viewLifecycleOwner) {
-            if(it==null){
-                _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
-            }else{
-                if (it.mediaType.equals("image")) {
-                    _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.nasa_picture_of_day_content_description_format,it.title)
+
+        mainViewModel.pictureResul.observe(viewLifecycleOwner) {
+            it.observe(viewLifecycleOwner){
+                Log.i("TAG", "getPictureOfTheDaykkkkkkkkkkkkkkkkkkkkkk:${it.url} ")
+//                Picasso.get()
+//                    .load(it.url)
+//                    .into(_binding?.activityMainImageOfTheDay)
+
+                if(it==null){
+                    _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
+                }else{
                     Picasso.get()
                         .load(it.url)
                         .into(_binding?.activityMainImageOfTheDay)
-                }else{
-                    _binding?.activityMainImageOfTheDay?.contentDescription=("R.string.image_of_the_day")
 
+
+                    if (it.mediaType.equals("image")) {
+                        _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.nasa_picture_of_day_content_description_format,it.title)
+                        Picasso.get()
+                            .load(it.url)
+                            .into(_binding?.activityMainImageOfTheDay)
+                    }else{
+                        _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.image_of_the_day)
+                        // this is a static image it will show if the result is video
+                        _binding?.activityMainImageOfTheDay?.setImageResource(R.drawable.apod)
+
+                    }
                 }
+
             }
 
+
+//            if(it==null){
+//                _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
+//            }else{
+//                Picasso.get()
+//                    .load(it.value?.url)
+//                    .into(_binding?.activityMainImageOfTheDay)
+//
+//
+//                if (it.mediaType.equals("image")) {
+//                    _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.nasa_picture_of_day_content_description_format,it.title)
+//                    Picasso.get()
+//                        .load(it.url)
+//                        .into(_binding?.activityMainImageOfTheDay)
+//                }else{
+//                    _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.image_of_the_day)
+//
+//                }
+//            }
+
         }
+
+        mainViewModel.pictureResult.observe(viewLifecycleOwner) {
+
+                if(it==null){
+                    _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
+                }else{
+                    Picasso.get()
+                        .load(it.url)
+                        .into(_binding?.activityMainImageOfTheDay)
+
+
+                    if (it.mediaType.equals("image")) {
+                        _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.nasa_picture_of_day_content_description_format,it.title)
+                        Picasso.get()
+                            .load(it.url)
+                            .into(_binding?.activityMainImageOfTheDay)
+                    }else{
+                        _binding?.activityMainImageOfTheDay?.contentDescription=getString(R.string.image_of_the_day)
+
+                    }
+                }
+
+
+
+        }
+
     }
 
     @SuppressLint("LogNotTimber")
@@ -97,10 +167,17 @@ class MainFragment : Fragment() , OnItemClicked{
 
         mainViewModel.asteroidFilter.observe(viewLifecycleOwner) {
 
+
+            if(it == AsteroidFilter.SAVED_ASTEROID){
+
+            }
             Log.i("TAG", "getAllAsteroid: ${it} ")
             mainViewModel.asteroidResult.observe(viewLifecycleOwner) {
 
                 Log.i("TAG", "getAllAsteroidddddddddddddddddddddddddddd: ${it.size} ")
+                if(it.size == 0){
+
+                }
                 Log.e("TAG", " viewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww$it ")
                 _binding?.statusLoadingWheel?.visibility=View.GONE
                 adapter.submitList(it)
@@ -110,11 +187,6 @@ class MainFragment : Fragment() , OnItemClicked{
 
     private fun setUpRecyclerView() {
         _binding!!.asteroidRecycler.adapter = adapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
 

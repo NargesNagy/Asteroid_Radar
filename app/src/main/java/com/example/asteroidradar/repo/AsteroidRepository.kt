@@ -3,7 +3,7 @@ package com.example.asteroidradar.repo
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.asteroidradar.data.local.AsteroidDataBase
-import com.example.asteroidradar.data.remote.RetrofitFactory
+import com.example.asteroidradar.data.remote.NetworkFactory
 import com.example.asteroidradar.data.remote.parseAsteroidsJsonResult
 import com.example.asteroidradar.models.Asteroid
 import com.example.asteroidradar.models.PictureOfDay
@@ -16,22 +16,40 @@ class AsteroidRepository(private val localDataBase: AsteroidDataBase) {
 
     suspend fun refreshAsteroidList() {
         withContext(Dispatchers.IO) {
-            val asteroid = RetrofitFactory.getAsteroidApi().getAllAsteroid(Constants.NASA_API_KEY)
+            val asteroid = NetworkFactory.getAsteroidApi().getAllAsteroid(Constants.NASA_API_KEY)
             val json = JSONObject(asteroid)
             val data = parseAsteroidsJsonResult(json)
             localDataBase.asteroidDao().updateData(data)
+
+            val response = NetworkFactory.getAsteroidApi().getPictureOfDay(Constants.NASA_API_KEY)
+            localDataBase.asteroidDao().insertPictureOfDay(response)
+
         }
     }
 
     suspend fun getPictureOfTheDay(): PictureOfDay? {
 
         return withContext(Dispatchers.IO) {
-            val response =
-                RetrofitFactory.getAsteroidApi().getPictureOfDay(Constants.NASA_API_KEY)
+            val response = NetworkFactory.getAsteroidApi().getPictureOfDay(Constants.NASA_API_KEY)
+            localDataBase.asteroidDao().insertPictureOfDay(response)
 
-            return@withContext response
+            return@withContext  response
+            //localDataBase.asteroidDao().getPictureOfDay()
         }
     }
+
+    suspend fun getPictureOf(): LiveData<PictureOfDay>? {
+
+        return withContext(Dispatchers.IO) {
+            val response = NetworkFactory.getAsteroidApi().getPictureOfDay(Constants.NASA_API_KEY)
+            localDataBase.asteroidDao().insertPictureOfDay(response)
+            Log.i("TAG", "getPictureOflllllllllll: ${localDataBase.asteroidDao().getPictureOfDay().value}")
+
+            return@withContext  localDataBase.asteroidDao().getPictureOfDay()
+            //
+        }
+    }
+
 
     suspend fun getAllAsteroid(): LiveData<List<Asteroid>> {
         return withContext(Dispatchers.IO) {

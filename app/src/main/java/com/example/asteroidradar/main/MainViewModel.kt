@@ -17,16 +17,34 @@ class MainViewModel (val repo: AsteroidRepository) : ViewModel() {
     private val _pictureResult = MutableLiveData<PictureOfDay>()
     val pictureResult: LiveData<PictureOfDay> = _pictureResult
 
+    private val _pictureResul = MutableLiveData<LiveData<PictureOfDay>>()
+    val pictureResul: MutableLiveData<LiveData<PictureOfDay>> = _pictureResul
+
+
     private val _asteroidFilter = MutableLiveData<AsteroidFilter>()
     val asteroidFilter: LiveData<AsteroidFilter>
         get() = _asteroidFilter
+
+
+    fun get(){
+        viewModelScope.launch {
+            repo.refreshAsteroidList()
+           // _pictureResult.value = repo.getPictureOfTheDay()
+           // getSavedAsteroid()
+
+        }
+    }
 
 
     init {
         viewModelScope.launch {
             repo.refreshAsteroidList()
             _pictureResult.value = repo.getPictureOfTheDay()
+            _pictureResul.value = repo.getPictureOf()
             getSavedAsteroid()
+
+            Log.i("TAG", "bbbbbbbbbbbbbbbbbbbbbbb: ${getSavedAsteroid()}")
+
         }
     }
 
@@ -49,80 +67,3 @@ class MainViewModel (val repo: AsteroidRepository) : ViewModel() {
 
 }
 
-
- /*
-
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-
-    //private val database = getDatabase(application)
-    val dataBase: AsteroidDataBase = AsteroidDataBase.getInstance(application)
-    private val asteroidRepository = AsteroidRepository(dataBase)
-
-    private val _pictureOfDay = MutableLiveData<PictureOfDay?>()
-    val pictureOfDay: LiveData<PictureOfDay?>
-        get() = _pictureOfDay
-
-    private val _navigateToDetailAsteroid = MutableLiveData<Asteroid?>()
-    val navigateToDetailAsteroid: LiveData<Asteroid?>
-        get() = _navigateToDetailAsteroid
-
-    fun doneNavigated() {
-        _navigateToDetailAsteroid.value = null
-    }
-
-
-    private var _asteroids = MutableLiveData<List<Asteroid>>()
-    val asteroids: LiveData<List<Asteroid>>
-        get() = _asteroids
-
-    init {
-        todayClicked()
-        viewModelScope.launch {
-            asteroidRepository.getAllAsteroid()
-            refreshPictureOfDay()
-        }
-    }
-
-    fun onAsteroidClicked(asteroid: Asteroid) {
-        _navigateToDetailAsteroid.value = asteroid
-    }
-
-    private suspend fun refreshPictureOfDay()  {
-
-        _pictureOfDay.value = asteroidRepository.getPictureOfTheDay()
-
-    }
-
-
-
-    fun todayClicked() {
-//        viewModelScope.launch {
-//            dataBase.asteroidDao().getAllAsteroid()
-//                .observe() { asteroids ->
-//                    _asteroids.value = asteroids
-//                }
-//        }
-    }
-
-    fun nextWeekClicked() {
-//        viewModelScope.launch {
-//            dataBase.asteroidDao.getAsteroids(seventhDay(), seventhDay())
-//                .collect { asteroids ->
-//                    _asteroids.value = asteroids
-//                }
-//        }
-    }
-
-    fun savedClicked() {
-//        viewModelScope.launch {
-//            dataBase.asteroidDao.getAllAsteroids().collect { asteroids ->
-//                _asteroids.value = asteroids
-//            }
-//        }
-    }
-
-}
-
-
-
- */

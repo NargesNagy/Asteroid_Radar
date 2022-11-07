@@ -10,6 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.util.concurrent.TimeUnit
 
 interface NetworkService {
     @GET("neo/rest/v1/feed")
@@ -19,12 +20,12 @@ interface NetworkService {
 
 }
 
-object RetrofitFactory {
+object NetworkFactory {
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     private val retrofit by lazy {
 
-        val okHttpClient = OkHttpClient.Builder()
+        val okHttpClient = OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
             .build()
         Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
@@ -32,6 +33,7 @@ object RetrofitFactory {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient)
             .build()
+
     }
 
     private val networkService: NetworkService by lazy {

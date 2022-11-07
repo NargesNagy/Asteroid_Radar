@@ -55,7 +55,7 @@ class DetailsFragment : Fragment() {
 //            }
         }
 
-       // _binding.mainImvOfTheDay
+
         _binding?.helpButton?.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()
         }

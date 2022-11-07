@@ -8,7 +8,6 @@ object Constants {
     const val DEFAULT_END_DATE_DAYS = 7
     const val BASE_URL = "https://api.nasa.gov/"
     const val WORKER_NAME = "asteroid"
-    const val IMAGE_MEDIA_TYPE = "image"
     const val NASA_API_KEY = "ZFdRb5M8kTfHmwzLCnbjjdvxIsxE8O1Ob1My1dQi"
 
     fun getCurrentDate(): String {
