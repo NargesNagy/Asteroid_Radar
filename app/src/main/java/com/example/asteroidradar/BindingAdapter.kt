@@ -6,8 +6,6 @@ import androidx.databinding.BindingAdapter
 import com.example.asteroidradar.models.PictureOfDay
 import com.squareup.picasso.Picasso
 
-
-
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
@@ -23,10 +21,10 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
         imageView.contentDescription=imageView.context.getString(R.string.potentially_hazardous_asteroid_image)
-        imageView.setImageResource(R.drawable.ic_baseline_insert_emoticon_24)
+        imageView.setImageResource(R.drawable.asteroid_safe)
     } else {
         imageView.contentDescription=imageView.context.getString(R.string.not_hazardous_asteroid_image)
-        imageView.setImageResource(R.drawable.ic_baseline_emoji_emotions_24)
+        imageView.setImageResource(R.drawable.asteroid_hazardous)
     }
 }
 
@@ -48,29 +46,3 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     textView.text = String.format(context.getString(R.string.km_s_unit_format), number)
 }
 
-@BindingAdapter("imageUrl")
-fun bindImage(imageView: ImageView, pictureOfDay: PictureOfDay?) {
-    if(pictureOfDay!=null){
-        pictureOfDay?.let {
-            if (it.mediaType.equals("image")) {
-                Picasso.get()
-                    .load(pictureOfDay?.url)
-                    .into(imageView)
-            }
-        }
-    }else{
-
-    }
-
-}
-
-@BindingAdapter("emptyTextDesc")
-fun bindTextViewToEmptyTextDesc(textView: TextView, strTitle: String?) {
-    val context = textView.context
-
-    if (strTitle == null) {
-        textView.text = context.getString(R.string.image_of_the_day)
-    } else {
-        textView.text = strTitle
-    }
-}

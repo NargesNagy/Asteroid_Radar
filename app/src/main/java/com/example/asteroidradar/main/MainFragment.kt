@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.asteroidradar.R
 import com.example.asteroidradar.databinding.FragmentMainBinding
+import com.example.asteroidradar.details.DetailsFragment
 import com.example.asteroidradar.models.Asteroid
 import com.squareup.picasso.Picasso
 
@@ -25,6 +27,7 @@ class MainFragment : Fragment() , OnItemClicked{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = MainAdapter(this)
+
     }
 
     override fun onCreateView(
@@ -42,11 +45,21 @@ class MainFragment : Fragment() , OnItemClicked{
 
 
     override fun onItemClicked(asteroid: Asteroid) {
-        findNavController().navigate(R.id.detailsFragment)
+        navigateToDetails(asteroid)
+//        findNavController().navigate(R.id.detailsFragment)
+//
+//        var bundle = Bundle()
+//        bundle.putParcelable("astroid" , asteroid)
+//        Log.i("TAG", "onViewCreated: ${asteroid}")
+//        val detailsfragment = DetailsFragment()
+//        detailsfragment.arguments = bundle
+//        fragmentManager?.beginTransaction()?.replace(R.id.fragmentContainerView, detailsfragment)?.commit()
+
     }
     private fun navigateToDetails(asteroid: Asteroid) {
-        //val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(asteroid)
-        //findNavController().navigate(action)
+        val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(asteroid)
+        findNavController().navigate(action)
+
     }
 
 
