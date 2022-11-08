@@ -22,29 +22,16 @@ class AsteroidRepository(private val localDataBase: AsteroidDataBase) {
             localDataBase.asteroidDao().updateData(data)
 
             val response = NetworkFactory.getAsteroidApi().getPictureOfDay(Constants.NASA_API_KEY)
+            localDataBase.asteroidDao().deleteAllPictures()
             localDataBase.asteroidDao().insertPictureOfDay(response)
 
-        }
-    }
-
-    suspend fun getPictureOfTheDay(): PictureOfDay? {
-
-        return withContext(Dispatchers.IO) {
-            val response = NetworkFactory.getAsteroidApi().getPictureOfDay(Constants.NASA_API_KEY)
-            localDataBase.asteroidDao().insertPictureOfDay(response)
-
-            return@withContext  response
-            //localDataBase.asteroidDao().getPictureOfDay()
         }
     }
 
     suspend fun getPictureOf(): LiveData<PictureOfDay>? {
 
         return withContext(Dispatchers.IO) {
-            val response = NetworkFactory.getAsteroidApi().getPictureOfDay(Constants.NASA_API_KEY)
-            localDataBase.asteroidDao().insertPictureOfDay(response)
-            Log.i("TAG", "getPictureOflllllllllll: ${localDataBase.asteroidDao().getPictureOfDay().value}")
-
+              Log.i("TAG", "getPictureOflllllllllll: ${localDataBase.asteroidDao().getPictureOfDay().value}")
             return@withContext  localDataBase.asteroidDao().getPictureOfDay()
             //
         }
