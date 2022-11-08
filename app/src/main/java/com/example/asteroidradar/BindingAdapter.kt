@@ -21,10 +21,10 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
         imageView.contentDescription=imageView.context.getString(R.string.potentially_hazardous_asteroid_image)
-        imageView.setImageResource(R.drawable.asteroid_safe)
+        imageView.setImageResource(R.drawable.asteroid_hazardous)
     } else {
         imageView.contentDescription=imageView.context.getString(R.string.not_hazardous_asteroid_image)
-        imageView.setImageResource(R.drawable.asteroid_hazardous)
+        imageView.setImageResource(R.drawable.asteroid_safe)
     }
 }
 

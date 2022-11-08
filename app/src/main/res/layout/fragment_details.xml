@@ -94,12 +94,12 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/help_button"
+                    android:id="@+id/help_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:src="@drawable/ic_baseline_help_24"
-                    android:contentDescription="@string/asteroid_info_help_button"/>
+                    android:contentDescription="@string/astronomical_unit_explanation_button"/>
 
             </LinearLayout>
 

@@ -56,7 +56,7 @@ class DetailsFragment : Fragment() {
         }
 
 
-        _binding?.helpButton?.setOnClickListener {
+        _binding?.helpImage?.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()
         }
 
